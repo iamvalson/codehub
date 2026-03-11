@@ -5,7 +5,7 @@ type Props = {
   onchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const roles: Role[] = ["student", "lecturer"];
+const roles: Role[] = ["STUDENT", "INSTRUCTOR"];
 
 const RoleToggle = ({ role, onchange }: Props) => (
   <div className="w-full p-1 bg-slate-900 rounded-lg flex mt-6">
