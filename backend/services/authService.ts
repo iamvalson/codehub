@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 
 class AuthService {
   static registerUser = async (
