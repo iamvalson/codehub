@@ -1,9 +1,14 @@
 import api from "@/lib/api";
-import type { RegisterUserInput } from "../schemas/auth.schema";
+import type { LoginUserInput, RegisterUserInput } from "../schemas/auth.schema";
 
 export const authService = {
   register: async (data: RegisterUserInput) => {
     const response = await api.post("/auth/register", data);
+    return response.data;
+  },
+
+  login: async (data: LoginUserInput) => {
+    const response = await api.post("/auth/login", data);
     return response.data;
   },
 

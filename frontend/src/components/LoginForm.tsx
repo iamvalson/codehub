@@ -1,4 +1,4 @@
-import { useRegister } from "@/features/auth/hooks/useAuth";
+import { useLogin, useRegister } from "@/features/auth/hooks/useAuth";
 import type { Role } from "@/types";
 import { useState } from "react";
 
@@ -7,8 +7,15 @@ type Props = {
 };
 
 const LoginForm = ({ signup }: Props) => {
-  const { handleRegister, isLoading, getFieldError, serverError } =
-    useRegister();
+  const {
+    handleRegister,
+    isSignupLoading,
+    signupServerError,
+    getSignupFieldError,
+  } = useRegister();
+
+  const { handleLogin, isLoginLoading, loginServerError, getLoginFieldError } =
+    useLogin();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -22,9 +29,21 @@ const LoginForm = ({ signup }: Props) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleRegister(formData);
+    if (signup) {
+      handleRegister(formData);
+    } else {
+      handleLogin({
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+      });
+    }
+  };
+
+  const handleErrorField = (name: string) => {
+    return signup ? getSignupFieldError(name) : getLoginFieldError(name);
   };
 
   return (
@@ -35,11 +54,17 @@ const LoginForm = ({ signup }: Props) => {
         </h2>
 
         {/* Global server error */}
-        {serverError && (
-          <div className="mt-4 bg-red-500/10 border border-red-500 text-red-400 px-4 py-3 rounded text-sm">
-            {serverError}
-          </div>
-        )}
+        {signup
+          ? signupServerError && (
+              <div className="mt-4 bg-red-500/10 border border-red-500 text-red-400 px-4 py-3 rounded text-sm">
+                {signupServerError}
+              </div>
+            )
+          : loginServerError && (
+              <div className="mt-4 bg-red-500/10 border border-red-500 text-red-400 px-4 py-3 rounded text-sm">
+                {loginServerError}
+              </div>
+            )}
 
         <div className="w-full p-1 bg-slate-900 rounded-lg flex mt-6">
           {(["STUDENT", "INSTRUCTOR"] as const).map((r) => (
@@ -71,11 +96,11 @@ const LoginForm = ({ signup }: Props) => {
               value={formData.name}
               onChange={handleChange}
               className={`w-full py-2 md:py-3 px-3 md:px-4 mt-1 rounded bg-slate-800 text-white focus:outline-none focus:ring-2 max-md:text-sm transition
-                ${getFieldError("name") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
+                ${handleErrorField("name") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
             />
-            {getFieldError("name") && (
+            {handleErrorField("name") && (
               <p className="text-red-400 text-xs mt-1">
-                {getFieldError("name")}
+                {handleErrorField("name")}
               </p>
             )}
           </div>
@@ -91,11 +116,11 @@ const LoginForm = ({ signup }: Props) => {
               value={formData.email}
               onChange={handleChange}
               className={`w-full py-2 md:py-3 px-3 md:px-4 mt-1 rounded bg-slate-800 text-white focus:outline-none focus:ring-2 max-md:text-sm transition
-                ${getFieldError("email") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
+                ${handleErrorField("email") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
             />
-            {getFieldError("email") && (
+            {handleErrorField("email") && (
               <p className="text-red-400 text-xs mt-1">
-                {getFieldError("email")}
+                {handleErrorField("email")}
               </p>
             )}
           </div>
@@ -111,11 +136,11 @@ const LoginForm = ({ signup }: Props) => {
               value={formData.password}
               onChange={handleChange}
               className={`w-full py-2 md:py-3 px-3 md:px-4 mt-1 rounded bg-slate-800 text-white focus:outline-none focus:ring-2 max-md:text-sm transition
-                ${getFieldError("password") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
+                ${handleErrorField("password") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
             />
-            {getFieldError("password") && (
+            {handleErrorField("password") && (
               <p className="text-red-400 text-xs mt-1">
-                {getFieldError("password")}
+                {handleErrorField("password")}
               </p>
             )}
           </div>
@@ -134,29 +159,38 @@ const LoginForm = ({ signup }: Props) => {
               value={formData.confirmPassword}
               onChange={handleChange}
               className={`w-full py-2 md:py-3 px-3 md:px-4 mt-1 rounded bg-slate-800 text-white focus:outline-none focus:ring-2 max-md:text-sm transition
-                ${getFieldError("confirmPassword") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
+                ${handleErrorField("confirmPassword") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
             />
-            {getFieldError("confirmPassword") && (
+            {handleErrorField("confirmPassword") && (
               <p className="text-red-400 text-xs mt-1">
-                {getFieldError("confirmPassword")}
+                {handleErrorField("confirmPassword")}
               </p>
             )}
           </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="bg-codehub-green py-2 md:py-3 px-6 rounded text-white font-semibold cursor-pointer transition-colors flex flex-row items-center justify-center gap-1 mt-4 group hover:bg-green-600"
-          >
-            {signup
-              ? isLoading
-                ? "Creating account..."
-                : "Create Account"
-              : "Sign In"}
-            <span className="max-md:hidden material-symbols-outlined group-hover:translate-x-2 transition duration-200">
-              arrow_right_alt
-            </span>
-          </button>
+          {signup ? (
+            <button
+              type="submit"
+              disabled={isSignupLoading}
+              className="bg-codehub-green py-2 md:py-3 px-6 rounded text-white font-semibold cursor-pointer transition-colors flex flex-row items-center justify-center gap-1 mt-4 group hover:bg-green-600"
+            >
+              {isSignupLoading ? "Creating account..." : "Create Account"}
+              <span className="max-md:hidden material-symbols-outlined group-hover:translate-x-2 transition duration-200">
+                arrow_right_alt
+              </span>
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={isLoginLoading}
+              className="bg-codehub-green py-2 md:py-3 px-6 rounded text-white font-semibold cursor-pointer transition-colors flex flex-row items-center justify-center gap-1 mt-4 group hover:bg-green-600"
+            >
+              {isLoginLoading ? "Signing In..." : "Sign In"}
+              <span className="max-md:hidden material-symbols-outlined group-hover:translate-x-2 transition duration-200">
+                arrow_right_alt
+              </span>
+            </button>
+          )}
         </div>
       </form>
       <hr />
