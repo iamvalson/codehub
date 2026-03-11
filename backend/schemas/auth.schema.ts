@@ -23,4 +23,11 @@ export const registerUserSchema = z
     path: ["confirmPassword"],
   });
 
+export const loginUserSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+  role: z.enum(["STUDENT", "INSTRUCTOR"]),
+});
+
+export type LoginUserInput = z.infer<typeof loginUserSchema>;
 export type RegisterUserInput = z.infer<typeof registerUserSchema>;
