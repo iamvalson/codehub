@@ -1,32 +1,57 @@
 import type { Role } from "@/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../services/auth.service";
 
-export const useAuth = () => {
-  const [role, setRole] = useState<Role>(() => {
+type FormState = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  role: Role;
+};
+
+type FieldError = {
+  field: string;
+  message: string;
+};
+
+export const useRegister = () => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<FieldError[]>([]);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const handleRegister = async (formData: FormState) => {
+    setIsLoading(true);
+    setErrors([]);
+    setServerError(null);
+
     try {
-      return (localStorage.getItem("role") as Role) || "student";
-    } catch {
-      return "student";
-    }
-  });
+      const response = await authService.register(formData);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem("role", role);
-    } catch {
-      // ignore write errors
-    }
-  }, [role]);
+      // Store token in localStorage
+      localStorage.setItem("token", response.token);
 
-  const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRole(e.target.value as Role);
+      // Redirect to dashboard
+      navigate("/dashboard");
+    } catch (error: any) {
+      const data = error.response?.data;
+
+      if (data?.errors) {
+        setErrors(data.errors);
+      } else {
+        setServerError(data.message || "An unexpected error occurred.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    console.log("Signing in as", role);
-    // add real submit logic here
+  // Helper — get error message for a specific field
+  const getFieldError = (field: string): string | undefined => {
+    return errors.find((error) => error.field === field)?.message;
   };
 
-  return { role, handleRoleChange, handleSubmit };
+  return { handleRegister, isLoading, getFieldError, serverError };
 };
