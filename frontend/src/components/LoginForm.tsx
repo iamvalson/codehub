@@ -48,7 +48,7 @@ const LoginForm = ({ signup }: Props) => {
 
   return (
     <div className="w-full max-w-lg py-6 px-4 sm:p-8 bg-codehub-panel border border-slate-800 shadow-2xl">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="mb-4">
         <h2 className="text-white text-xl sm:text-2xl font-semibold">
           {signup ? "Create Account" : "Sign In"}
         </h2>
@@ -77,7 +77,7 @@ const LoginForm = ({ signup }: Props) => {
                 value={r}
                 onChange={handleChange}
               />
-              <div className="py-1 md:py-2 text-center rounded text-sm font-medium transition-all peer-checked:bg-primary peer-checked:text-background-dark text-slate-400 group-hover:text-slate-200">
+              <div className="py-1 md:py-2 text-center rounded text-sm font-medium transition-all peer-checked:bg-codehub-primary peer-checked:text-background-dark text-slate-400 group-hover:text-slate-200">
                 {r === "STUDENT" ? "Student" : "Instructor"}
               </div>
             </label>
@@ -96,7 +96,7 @@ const LoginForm = ({ signup }: Props) => {
               value={formData.name}
               onChange={handleChange}
               className={`w-full py-2 md:py-3 px-3 md:px-4 mt-1 rounded bg-slate-800 text-white focus:outline-none focus:ring-2 max-md:text-sm transition
-                ${handleErrorField("name") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
+                ${handleErrorField("name") ? "ring-2 ring-red-500" : "focus:ring-codehub-primary"}`}
             />
             {handleErrorField("name") && (
               <p className="text-red-400 text-xs mt-1">
@@ -116,7 +116,7 @@ const LoginForm = ({ signup }: Props) => {
               value={formData.email}
               onChange={handleChange}
               className={`w-full py-2 md:py-3 px-3 md:px-4 mt-1 rounded bg-slate-800 text-white focus:outline-none focus:ring-2 max-md:text-sm transition
-                ${handleErrorField("email") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
+                ${handleErrorField("email") ? "ring-2 ring-red-500" : "focus:ring-codehub-primary"}`}
             />
             {handleErrorField("email") && (
               <p className="text-red-400 text-xs mt-1">
@@ -136,7 +136,7 @@ const LoginForm = ({ signup }: Props) => {
               value={formData.password}
               onChange={handleChange}
               className={`w-full py-2 md:py-3 px-3 md:px-4 mt-1 rounded bg-slate-800 text-white focus:outline-none focus:ring-2 max-md:text-sm transition
-                ${handleErrorField("password") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
+                ${handleErrorField("password") ? "ring-2 ring-red-500" : "focus:ring-codehub-primary"}`}
             />
             {handleErrorField("password") && (
               <p className="text-red-400 text-xs mt-1">
@@ -159,7 +159,7 @@ const LoginForm = ({ signup }: Props) => {
               value={formData.confirmPassword}
               onChange={handleChange}
               className={`w-full py-2 md:py-3 px-3 md:px-4 mt-1 rounded bg-slate-800 text-white focus:outline-none focus:ring-2 max-md:text-sm transition
-                ${handleErrorField("confirmPassword") ? "ring-2 ring-red-500" : "focus:ring-primary"}`}
+                ${handleErrorField("confirmPassword") ? "ring-2 ring-red-500" : "focus:ring-codehub-primary"}`}
             />
             {handleErrorField("confirmPassword") && (
               <p className="text-red-400 text-xs mt-1">
@@ -193,12 +193,12 @@ const LoginForm = ({ signup }: Props) => {
           )}
         </div>
       </form>
-      <hr />
+      <div className="bg-codehub-primary/10 h-px w-full" />
       <p className="text-center text-sm text-slate-400 mt-4">
         {signup ? "Already have an account?" : "Don't have an account?"}{" "}
         <a
           href={signup ? "/login" : "/signup"}
-          className="text-primary hover:underline"
+          className="text-codehub-primary hover:underline"
         >
           {signup ? "Log In" : "Create account"}
         </a>
