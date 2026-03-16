@@ -13,6 +13,8 @@
   --color-background-light: #f5f7f8;
   --color-background-dark: #0f1823;
   --color-sidebar-dark: #0b121a;
+  --color-sidebar-details-background: #0d141d;
+  --color-course-card-background: #151f2b;
 
   --font-mono: "JetBrains Mono", monospace;
   --font-display: "Space Grotesk", sans-serif;

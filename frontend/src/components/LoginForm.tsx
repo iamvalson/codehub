@@ -175,9 +175,11 @@ const LoginForm = ({ signup }: Props) => {
               className="bg-codehub-green py-2 md:py-3 px-6 rounded text-white font-semibold cursor-pointer transition-colors flex flex-row items-center justify-center gap-1 mt-4 group hover:bg-green-600"
             >
               {isSignupLoading ? "Creating account..." : "Create Account"}
-              <span className="max-md:hidden material-symbols-outlined group-hover:translate-x-2 transition duration-200">
-                arrow_right_alt
-              </span>
+              {!isSignupLoading && (
+                <span className="max-md:hidden material-symbols-outlined group-hover:translate-x-2 transition duration-200">
+                  arrow_right_alt
+                </span>
+              )}
             </button>
           ) : (
             <button
@@ -186,9 +188,11 @@ const LoginForm = ({ signup }: Props) => {
               className="bg-codehub-green py-2 md:py-3 px-6 rounded text-white font-semibold cursor-pointer transition-colors flex flex-row items-center justify-center gap-1 mt-4 group hover:bg-green-600"
             >
               {isLoginLoading ? "Signing In..." : "Sign In"}
-              <span className="max-md:hidden material-symbols-outlined group-hover:translate-x-2 transition duration-200">
-                arrow_right_alt
-              </span>
+              {!isLoginLoading && (
+                <span className="max-md:hidden material-symbols-outlined group-hover:translate-x-2 transition duration-200">
+                  arrow_right_alt
+                </span>
+              )}
             </button>
           )}
         </div>

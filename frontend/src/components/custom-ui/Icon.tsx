@@ -5,12 +5,11 @@ type IconProps = {
   className?: string;
 };
 
-const Icon = ({ name, size = 20, fill = 0, className = "" }: IconProps) => (
+const Icon = ({ name, size, fill = 0, className = "" }: IconProps) => (
   <span
     className={`material-symbols-outlined ${className}`}
     style={{
-      fontSize: size,
-      fontVariationSettings: `'FILL' ${fill}, 'wght' 300, 'GRAD' 0, 'opsz' ${size}`,
+      fontVariationSettings: `'FILL' ${fill}, 'wght' 300, 'GRAD' 0, 'opsz' ${size || 20}`,
     }}
   >
     {name}

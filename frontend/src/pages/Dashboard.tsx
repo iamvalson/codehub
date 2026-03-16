@@ -1,4 +1,4 @@
-import Sidebar from "@/components/custom-ui/Sidebar";
+import DashboardContent from "@/components/DashboardContent";
 import type { NavTab } from "@/components/Header";
 import Header from "@/components/Header";
 
@@ -12,9 +12,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col h-screen bg-background-dark">
       <Header navMenu={dashboardHeaderTabs} />
-      <div className="flex-1 overflow-hidden">
-        <Sidebar />
-      </div>
+      <DashboardContent />
     </div>
   );
 };
