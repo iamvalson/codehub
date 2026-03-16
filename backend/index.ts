@@ -4,6 +4,7 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import authRouter from "./routes/authRoute.js";
+import executionRoutes from "./routes/execution.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -32,6 +33,8 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api/execution", executionRoutes);
+
 app.get("/", (req, res) => {
   return res.json({ message: "API is running" });
 });
